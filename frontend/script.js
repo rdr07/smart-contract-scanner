@@ -1,4 +1,4 @@
-const API_URL = 'https://smart-contract-scanner.onrender.com';
+const API_URL = 'https://smart-contract-scanner.onrender.com'; // v3
 
 async function scanCode() {
     const code = document.getElementById('solidityCode').value;
