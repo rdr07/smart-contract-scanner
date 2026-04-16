@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartScan AI — by Diya Rathod</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#05051a;font-family:'Segoe UI',sans-serif;min-height:100vh;color:#e0e0e0;}
+
+/* TOPBAR */
+.topbar{background:#08083a;padding:12px 28px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2d2b6b;position:sticky;top:0;z-index:100;}
+.logo-wrap{display:flex;align-items:center;gap:12px;}
+.logo-anim{position:relative;width:42px;height:42px;}
+.logo-ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:#6366f1;border-right-color:#a855f7;animation:spin 2s linear infinite;}
+.logo-ring2{position:absolute;inset:4px;border-radius:50%;border:2px solid transparent;border-bottom-color:#ec4899;border-left-color:#818cf8;animation:spin 3s linear infinite reverse;}
+.logo-core{position:absolute;inset:8px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;animation:corepulse 2s ease-in-out infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes corepulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+.logo-text{display:flex;flex-direction:column;}
+.logo-name{font-size:16px;font-weight:900;color:#fff;letter-spacing:1px;line-height:1;}
+.logo-name span{background:linear-gradient(135deg,#818cf8,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-sub{font-size:9px;color:#4a4a8a;letter-spacing:2px;margin-top:2px;}
+.pill{background:#6366f115;color:#818cf8;padding:2px 10px;border-radius:20px;font-size:10px;border:1px solid #6366f133;letter-spacing:1px;}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.online{display:flex;align-items:center;gap:5px;font-size:10px;color:#4ade8088;}
+.online-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* HERO */
+.hero{background:#08083a;padding:40px 28px 32px;text-align:center;border-bottom:1px solid #2d2b6b;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:#6366f110;border:1px solid #6366f133;color:#818cf8;padding:5px 16px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:18px;letter-spacing:2px;}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:#818cf8;animation:pulse 1s infinite;}
+.hero-logo-big{position:relative;width:90px;height:90px;margin:0 auto 20px;}
+.hlr1{position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#6366f1;border-right-color:#a855f7;animation:spin 2s linear infinite;}
+.hlr2{position:absolute;inset:8px;border-radius:50%;border:3px solid transparent;border-bottom-color:#ec4899;border-left-color:#c084fc;animation:spin 2.5s linear infinite reverse;}
+.hlr3{position:absolute;inset:16px;border-radius:50%;border:2px solid transparent;border-top-color:#818cf8;animation:spin 3s linear infinite;}
+.hlcore{position:absolute;inset:22px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;animation:corepulse 2s ease-in-out infinite;box-shadow:0 0 30px #6366f144;}
+.hero h1{font-size:2.6rem;font-weight:900;color:#fff;letter-spacing:3px;margin-bottom:10px;}
+.hero h1 span{background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{font-size:13px;color:#4a4a8a;margin-bottom:24px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7;}
+.hero-stats{display:flex;justify-content:center;gap:0;margin-bottom:0;}
+.hs{text-align:center;padding:16px 28px;border-right:1px solid #2d2b6b;}
+.hs:last-child{border-right:none;}
+.hs-n{font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hs-l{font-size:9px;color:#4a4a8a;letter-spacing:1.5px;margin-top:4px;}
+
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:1fr 1fr;min-height:520px;}
+.left-panel{padding:24px;border-right:1px solid #2d2b6b;display:flex;flex-direction:column;gap:14px;}
+.right-panel{padding:24px;display:flex;flex-direction:column;gap:12px;background:#05051a;}
+.sec-label{font-size:9px;font-weight:700;color:#4a4a8a;letter-spacing:3px;display:flex;align-items:center;gap:8px;}
+.sec-label::after{content:'';flex:1;height:1px;background:#2d2b6b;}
+.editor{background:#030318;border:1px solid #2d2b6b;border-radius:10px;overflow:hidden;flex:1;}
+.ed-bar{background:#08083a;padding:8px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #2d2b6b;}
+.d1{width:8px;height:8px;border-radius:50%;background:#ff5f57;}
+.d2{width:8px;height:8px;border-radius:50%;background:#ffbd2e;}
+.d3{width:8px;height:8px;border-radius:50%;background:#28ca41;}
+.ed-lang{font-size:9px;color:#4a4a8a;margin-left:auto;letter-spacing:1px;}
+textarea#solidityCode{width:100%;height:300px;background:transparent;border:none;padding:16px;font-family:'Courier New',monospace;font-size:12px;color:#67e8f9;resize:vertical;outline:none;line-height:1.7;}
+textarea#solidityCode::placeholder{color:#2d2b6b;}
+.btns{display:flex;gap:8px;}
+.btn-scan{flex:1;background:linear-gradient(135deg,#6366f1,#a855f7);color:white;border:none;padding:12px;border-radius:8px;font-weight:800;font-size:13px;cursor:pointer;letter-spacing:1px;position:relative;overflow:hidden;}
+.btn-scan::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#a855f7,#ec4899);opacity:0;transition:opacity 0.3s;}
+.btn-scan:hover::after{opacity:1;}
+.btn-scan span{position:relative;z-index:1;}
+.btn-scan:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-sm{background:#0d0d30;color:#818cf8;border:1px solid #2d2b6b;padding:12px 16px;border-radius:8px;font-size:11px;cursor:pointer;}
+.btn-sm:hover{background:#1a1a4a;}
+
+/* LOADING */
+.loading{display:none;text-align:center;padding:60px 20px;}
+.load-anim{position:relative;width:70px;height:70px;margin:0 auto 20px;}
+.lr1{position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#6366f1;border-right-color:#a855f7;animation:spin 1s linear infinite;}
+.lr2{position:absolute;inset:10px;border-radius:50%;border:3px solid transparent;border-bottom-color:#ec4899;animation:spin 1.5s linear infinite reverse;}
+.lrcore{position:absolute;inset:18px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.loading p{font-size:11px;color:#4a4a8a;letter-spacing:2px;animation:pulse 1s infinite;}
+
+/* RESULTS */
+.results{display:none;}
+.threat-bar{background:#0d0d30;border-radius:10px;padding:14px;border:1px solid #2d2b6b;}
+.tb-top{display:flex;justify-content:space-between;margin-bottom:8px;}
+.tb-lbl{font-size:9px;color:#4a4a8a;letter-spacing:2px;}
+.tb-val{font-size:11px;font-weight:700;color:#ef4444;letter-spacing:1px;}
+.tb-track{background:#2d2b6b;border-radius:4px;height:6px;}
+.tb-fill{height:100%;background:linear-gradient(90deg,#6366f1,#a855f7,#ef4444);border-radius:4px;transition:width 1s ease;}
+.scores{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.sc{background:#0d0d30;border:1px solid #2d2b6b;border-radius:8px;padding:10px;text-align:center;}
+.sc.hot{border-color:#ef444433;background:#ef444408;}
+.sc-n{font-size:1.3rem;font-weight:800;color:#fff;}
+.sc.hot .sc-n{color:#f87171;}
+.sc-l{font-size:8px;color:#4a4a8a;letter-spacing:1px;margin-top:3px;}
+.vuln-list{display:flex;flex-direction:column;gap:10px;}
+.vuln-card{background:#0d0d30;border-radius:10px;padding:14px;border:1px solid #ef444422;border-left:3px solid #ef4444;}
+.vuln-card.Medium{border-left-color:#f59e0b;border-color:#f59e0b22;}
+.vuln-card.Low{border-left-color:#818cf8;border-color:#818cf822;}
+.vt{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px;}
+.v-name{font-size:13px;font-weight:700;color:#fca5a5;}
+.vuln-card.Medium .v-name{color:#fcd34d;}
+.vuln-card.Low .v-name{color:#a5b4fc;}
+.v-badge{padding:3px 10px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;white-space:nowrap;}
+.badge-High{background:#ef444415;color:#f87171;border:1px solid #ef444433;}
+.badge-Medium{background:#f59e0b15;color:#fcd34d;border:1px solid #f59e0b33;}
+.badge-Low{background:#6366f115;color:#a5b4fc;border:1px solid #6366f133;}
+.v-desc{font-size:11px;color:#4a4a8a;line-height:1.7;}
+.ai-box{background:#0d0d30;border-radius:10px;padding:16px;border:1px solid #6366f133;}
+.ai-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #2d2b6b;}
+.ai-spin{position:relative;width:28px;height:28px;flex-shrink:0;}
+.asr{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:#6366f1;border-right-color:#a855f7;animation:spin 1.5s linear infinite;}
+.asr2{position:absolute;inset:5px;border-radius:50%;border:1px solid transparent;border-bottom-color:#ec4899;animation:spin 2s linear infinite reverse;}
+.ascore{position:absolute;inset:8px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;}
+.ai-lbl{font-size:10px;font-weight:700;color:#818cf8;letter-spacing:2px;}
+.ai-mod{font-size:9px;color:#4a4a8a;margin-left:auto;background:#030318;padding:2px 8px;border-radius:4px;border:1px solid #2d2b6b;}
+.ai-body{font-size:12px;color:#6b7280;line-height:1.9;white-space:pre-wrap;}
+.scan-anim{display:flex;align-items:center;gap:8px;margin-top:12px;}
+.scan-lbl{font-size:9px;color:#4a4a8a;letter-spacing:1px;}
+.scan-track{flex:1;background:#2d2b6b;border-radius:4px;height:3px;overflow:hidden;}
+.scan-fill{height:100%;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899);animation:scanbar 2s infinite;}
+@keyframes scanbar{0%{width:0;margin-left:0;}70%{width:100%;margin-left:0;}100%{width:0;margin-left:100%;}}
+.scan-pct{font-size:9px;color:#818cf8;letter-spacing:1px;}
+.empty-state{text-align:center;padding:60px 20px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.empty-anim{position:relative;width:70px;height:70px;margin:0 auto 20px;opacity:0.3;}
+.er1{position:absolute;inset:0;border-radius:50%;border:2px solid #6366f1;animation:spin 4s linear infinite;}
+.er2{position:absolute;inset:12px;border-radius:50%;border:2px solid #a855f7;animation:spin 6s linear infinite reverse;}
+.ercore{position:absolute;inset:22px;background:#6366f122;border-radius:50%;border:1px solid #6366f144;}
+.empty-txt{font-size:10px;color:#2d2b6b;letter-spacing:2px;line-height:2.2;}
+
+/* FOOTER */
+.footer{background:#08083a;padding:20px 28px;border-top:1px solid #2d2b6b;}
+.footer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #2d2b6b;}
+.footer-logo{display:flex;align-items:center;gap:10px;}
+.footer-logo-anim{position:relative;width:32px;height:32px;}
+.flr{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:#6366f1;border-right-color:#a855f7;animation:spin 2s linear infinite;}
+.flcore{position:absolute;inset:6px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.footer-brand{font-size:14px;font-weight:800;color:#fff;}
+.footer-brand span{background:linear-gradient(135deg,#818cf8,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.footer-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.ftag{background:#6366f110;color:#818cf8;padding:3px 10px;border-radius:20px;font-size:9px;border:1px solid #6366f122;letter-spacing:1px;}
+.ftag.live{background:#4ade8010;color:#4ade80;border-color:#4ade8022;display:flex;align-items:center;gap:5px;}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.built-by{display:flex;align-items:center;gap:12px;}
+.av{width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;border:2px solid #6366f155;}
+.built-info{}
+.built-name{font-size:13px;font-weight:700;color:#fff;}
+.built-title{font-size:10px;color:#4a4a8a;margin-top:2px;}
+.li-btn{background:linear-gradient(135deg,#6366f1,#a855f7);color:white;border:none;padding:9px 20px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.5px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.li-btn:hover{opacity:0.9;}
+.footer-copy{font-size:10px;color:#2d2b6b;letter-spacing:0.5px;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo-wrap">
+    <div class="logo-anim">
+      <div class="logo-ring"></div>
+      <div class="logo-ring2"></div>
+      <div class="logo-core">🔐</div>
+    </div>
+    <div class="logo-text">
+      <div class="logo-name">Smart<span>Scan AI</span></div>
+      <div class="logo-sub">BLOCKCHAIN SECURITY</div>
+    </div>
+    <div class="pill">v2.0</div>
+  </div>
+  <div class="topbar-right">
+    <div class="online"><span class="online-dot"></span>SYSTEM ONLINE</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="badge-dot"></span>AI-POWERED BLOCKCHAIN SECURITY TOOL</div>
+  <div class="hero-logo-big">
+    <div class="hlr1"></div>
+    <div class="hlr2"></div>
+    <div class="hlr3"></div>
+    <div class="hlcore">🔐</div>
+  </div>
+  <h1>Smart<span>Scan AI</span></h1>
+  <p>Detect vulnerabilities in Solidity smart contracts before hackers do — powered by Groq AI & Slither static analysis engine</p>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n">12+</div><div class="hs-l">VULN TYPES</div></div>
+    <div class="hs"><div class="hs-n">FREE</div><div class="hs-l">FOREVER</div></div>
+    <div class="hs"><div class="hs-n">AI</div><div class="hs-l">GROQ POWERED</div></div>
+    <div class="hs"><div class="hs-n">LIVE</div><div class="hs-l">DEMO</div></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-grid">
+  <div class="left-panel">
+    <div class="sec-label">CONTRACT INPUT</div>
+    <div class="editor">
+      <div class="ed-bar">
+        <div class="d1"></div><div class="d2"></div><div class="d3"></div>
+        <span class="ed-lang">SOLIDITY · EVM</span>
+      </div>
+      <textarea id="solidityCode" placeholder="// Paste your Solidity smart contract here...
+pragma solidity ^0.8.0;
+contract MyContract {
+    ...
+}"></textarea>
+    </div>
+    <div class="btns">
+      <button class="btn-scan" id="scanBtn" onclick="scanCode()"><span>🔍 SCAN CONTRACT</span></button>
+      <button class="btn-sm" onclick="loadSample()">Sample</button>
+      <button class="btn-sm" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="sec-label">THREAT ANALYSIS</div>
+
+    <div class="loading" id="loading">
+      <div class="load-anim">
+        <div class="lr1"></div>
+        <div class="lr2"></div>
+        <div class="lrcore">🤖</div>
+      </div>
+      <p>AI IS ANALYZING YOUR CONTRACT...</p>
+    </div>
+
+    <div class="empty-state" id="emptyState">
+      <div class="empty-anim">
+        <div class="er1"></div>
+        <div class="er2"></div>
+        <div class="ercore"></div>
+      </div>
+      <div class="empty-txt">PASTE YOUR SOLIDITY CODE<br>AND CLICK SCAN TO BEGIN<br>AI-POWERED SECURITY ANALYSIS</div>
+    </div>
+
+    <div class="results" id="results">
+      <div class="threat-bar">
+        <div class="tb-top">
+          <span class="tb-lbl">RISK SCORE</span>
+          <span class="tb-val" id="threatLevel">SCANNING...</span>
+        </div>
+        <div class="tb-track"><div class="tb-fill" id="threatFill" style="width:0%"></div></div>
+      </div>
+      <div class="scores">
+        <div class="sc hot"><div class="sc-n" id="totalCount">0</div><div class="sc-l">TOTAL</div></div>
+        <div class="sc hot"><div class="sc-n" id="highCount">0</div><div class="sc-l">HIGH</div></div>
+        <div class="sc"><div class="sc-n" id="medCount">0</div><div class="sc-l">MEDIUM</div></div>
+        <div class="sc"><div class="sc-n" id="lowCount">0</div><div class="sc-l">LOW</div></div>
+      </div>
+      <div class="vuln-list" id="vulnList"></div>
+      <div class="ai-box">
+        <div class="ai-hd">
+          <div class="ai-spin">
+            <div class="asr"></div>
+            <div class="asr2"></div>
+            <div class="ascore">🤖</div>
+          </div>
+          <span class="ai-lbl">GROQ AI ANALYSIS</span>
+          <span class="ai-mod">llama-3.3-70b</span>
+        </div>
+        <div class="ai-body" id="aiReport"></div>
+        <div class="scan-anim">
+          <span class="scan-lbl">AI PROCESSING</span>
+          <div class="scan-track"><div class="scan-fill"></div></div>
+          <span class="scan-pct">LIVE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-top">
+    <div class="footer-logo">
+      <div class="footer-logo-anim">
+        <div class="flr"></div>
+        <div class="flcore">🔐</div>
+      </div>
+      <div class="footer-brand">Smart<span>Scan AI</span></div>
+    </div>
+    <div class="footer-tags">
+      <div class="ftag">PYTHON</div>
+      <div class="ftag">FLASK</div>
+      <div class="ftag">GROQ AI</div>
+      <div class="ftag">SOLIDITY</div>
+      <div class="ftag">SLITHER</div>
+      <div class="ftag live"><span class="online-dot"></span>LIVE DEMO</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="built-by">
+      <div class="av">DR</div>
+      <div class="built-info">
+        <div class="built-name">Diya Rathod</div>
+        <div class="built-title">MSc Cybersecurity @ EPITA · AI × Blockchain × Security</div>
+      </div>
+    </div>
+    <a class="li-btn" href="https://www.linkedin.com/in/diya-rathod-664352346" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      Connect on LinkedIn
+    </a>
+    <div class="footer-copy">© 2026 SmartScan AI · Built with ❤️ by Diya Rathod</div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'http://127.0.0.1:5000';
+
+async function scanCode() {
+  const code = document.getElementById('solidityCode').value;
+  if (!code.trim()) { alert('Please paste your Solidity code first!'); return; }
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('scanBtn').disabled = true;
+  try {
+    const response = await fetch(API_URL + '/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code })
+    });
+    const data = await response.json();
+    displayResults(data);
+  } catch (e) {
+    alert('Error connecting to scanner. Make sure backend is running!');
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('scanBtn').disabled = false;
+  }
+}
+
+function displayResults(data) {
+  document.getElementById('results').style.display = 'block';
+  let high = 0, med = 0, low = 0;
+  data.vulnerabilities.forEach(v => {
+    if (v.severity === 'High') high++;
+    else if (v.severity === 'Medium') med++;
+    else low++;
+  });
+  document.getElementById('totalCount').textContent = data.total_found;
+  document.getElementById('highCount').textContent = high;
+  document.getElementById('medCount').textContent = med;
+  document.getElementById('lowCount').textContent = low;
+  const score = Math.min(100, data.total_found * 25 + high * 30);
+  document.getElementById('threatFill').style.width = score + '%';
+  document.getElementById('threatLevel').textContent =
+    score >= 70 ? 'CRITICAL — ' + score + '/100' :
+    score >= 40 ? 'HIGH — ' + score + '/100' :
+    score > 0   ? 'MEDIUM — ' + score + '/100' : 'SAFE — 0/100';
+  const vulnList = document.getElementById('vulnList');
+  if (data.vulnerabilities.length === 0) {
+    vulnList.innerHTML = '<div style="text-align:center;padding:20px;color:#4ade80;font-size:12px;letter-spacing:1px;">✅ NO VULNERABILITIES FOUND — CONTRACT LOOKS SAFE</div>';
+  } else {
+    vulnList.innerHTML = data.vulnerabilities.map(v => `
+      <div class="vuln-card ${v.severity}">
+        <div class="vt">
+          <div class="v-name">⚠ ${v.name.toUpperCase()}</div>
+          <span class="v-badge badge-${v.severity}">${v.severity.toUpperCase()}</span>
+        </div>
+        <div class="v-desc">${v.description}</div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('aiReport').textContent = data.ai_report;
+}
+
+function clearAll() {
+  document.getElementById('solidityCode').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'flex';
+}
+
+function loadSample() {
+  document.getElementById('solidityCode').value = `pragma solidity ^0.8.0;\n\ncontract VulnerableBank {\n    mapping(address => uint) public balances;\n\n    function deposit() public payable {\n        balances[msg.sender] += msg.value;\n    }\n\n    function withdraw() public {\n        uint amount = balances[msg.sender];\n        require(amount > 0);\n        (bool success, ) = msg.sender.call{value: amount}("");\n        require(success);\n        balances[msg.sender] = 0;\n    }\n}`;
+}
+</script>
+</body>
+</html>                                                                                                                                                                                                               
