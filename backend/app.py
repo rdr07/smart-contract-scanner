@@ -5,7 +5,7 @@ from ai_explainer import explain_vulnerability
 import os
 
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
-CORS(app)
+CORS(app, origins="*")
 
 @app.route('/')
 def home():
@@ -13,17 +13,24 @@ def home():
 
 @app.route('/scan', methods=['POST'])
 def scan():
-    data = request.get_json()
-    if not data or 'code' not in data:
-        return jsonify({"error": "No Solidity code provided"}), 400
-    solidity_code = data['code']
-    vulnerabilities = run_slither(solidity_code)
-    ai_report = explain_vulnerability(vulnerabilities)
-    return jsonify({
-        "vulnerabilities": vulnerabilities,
-        "ai_report": ai_report,
-        "total_found": len(vulnerabilities)
-    })
+    try:
+        data = request.get_json()
+        if not data or 'code' not in data:
+            return jsonify({"error": "No Solidity code provided"}), 400
+        solidity_code = data['code']
+        vulnerabilities = run_slither(solidity_code)
+        ai_report = explain_vulnerability(vulnerabilities)
+        return jsonify({
+            "vulnerabilities": vulnerabilities,
+            "ai_report": ai_report,
+            "total_found": len(vulnerabilities)
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/health')
+def health():
+    return jsonify({"status": "ok"})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
