@@ -1,17 +1,14 @@
 from groq import Groq
-from dotenv import load_dotenv
 import os
-
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
-
-api_key = os.getenv('GROQ_API_KEY')
 
 def explain_vulnerability(vulnerabilities):
     if not vulnerabilities:
         return "✅ No vulnerabilities found! Your contract looks safe."
 
+    api_key = os.environ.get('GROQ_API_KEY')
+
     if not api_key:
-        return "❌ GROQ_API_KEY not found in .env file."
+        return "❌ GROQ_API_KEY not set in environment."
 
     try:
         client = Groq(api_key=api_key)
