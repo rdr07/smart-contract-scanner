@@ -17,16 +17,18 @@ def explain_vulnerability(vulnerabilities):
         for v in vulnerabilities:
             vuln_text += f"\n- Issue: {v['name']}\n- Severity: {v['severity']}\n- Description: {v['description']}\n"
 
-        prompt = f"""You are a blockchain security expert teaching a beginner developer.
-A smart contract scan found these security issues:
+        prompt = f"""You are a blockchain security expert. Analyze these smart contract vulnerabilities:
 {vuln_text}
 
-For each issue explain:
-1. What is this vulnerability in simple English
-2. How a hacker could exploit it step by step
-3. Exact code fix with before and after example
+For each vulnerability respond in this EXACT format with no markdown symbols like # or **:
 
-Be clear, simple and educational."""
+VULNERABILITY: [name in caps]
+WHAT IT IS: [1 sentence simple explanation]
+HOW HACKERS EXPLOIT IT: [2-3 short bullet points starting with ->]
+CODE FIX: [1-2 sentence fix]
+---
+
+Keep it short, clear and professional. No markdown. No hashtags. No asterisks."""
 
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
